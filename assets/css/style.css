@@ -1,0 +1,17 @@
+.input-group-text {
+    min-width: 100px !important;
+}
+
+.questionHolder {
+    font-size: 2rem;
+}
+.answersChoice {
+
+}
+
+#cardHeader {
+ font-size: 1.2rem;
+}
+.answerOption {
+    font-size: 1.8rem;
+}

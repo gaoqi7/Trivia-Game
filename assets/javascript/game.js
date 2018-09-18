@@ -2,8 +2,8 @@
 
 var questionsTotal = 10;
 var questionPool = [];
-var correctAnswer = 0;
-var wrongAnswer = questionsTotal - correctAnswer;
+var correctAnswerTotal = 0;
+var wrongAnswer = questionsTotal - correctAnswerTotal;
 var strUrl = "https://opentdb.com/api.php?amount=" + questionsTotal
 //Counter for Ending API url building process
 var counter = 0;
@@ -41,6 +41,8 @@ function getData()
 function buildNewGameCard()
 {
     let queObj = questionPool.results[cardCounter];
+    //Build Card Header
+    $("#cardHeader").text(`Question NO.${cardCounter + 1}`);
     //Build Question Line
     $("#questionHolder").html(queObj.question);
 
@@ -52,7 +54,7 @@ function buildNewGameCard()
     //building process
     for (let j = 0; j < queObj.incorrect_answers.length; j++)
     {
-        $("ul").append(`<li>${queObj.incorrect_answers[j]}</li>`);
+        $("ul").append(`<li class = "answerOption">${queObj.incorrect_answers[j]}</li>`);
     };
     $(`ul li:nth-child(${i + 1})`).addClass("correctAnswer");
 };
@@ -76,7 +78,7 @@ function displayTimer()
     var timeLeft = intervalTime;
     function setCountDown()
     {
-        $("#timer").text(timeLeft);
+        $("#timer").text(`Time left: ${timeLeft}s`);
         timeLeft--;
     };
     setCountDown();
@@ -100,6 +102,7 @@ function cardSwitch()
             if ($(this).hasClass("correctAnswer"))
             {
                 console.log("you are right!");
+                correctAnswerTotal++;
             } else
             {
                 console.log("you are wrong");
@@ -114,6 +117,7 @@ function cardSwitch()
     {
         clearInterval(intervalId);
         clearInterval(timerIntervalId);
+
         console.log("game over");
     };
 
