@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Trivia Game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="assets/css/style.css" />
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="assets/javascript/game.js"></script>
+
+</head>
+
+<body>
+
+    <h1>Hello Trivia</h1>
+    <select id="triviaCategory" onchange="selectHandler(this)" name="category">
+        <option value="" selected hidden>Choose Question Category</option>
+        <option value="">Any Category</option>
+        <option value="9">General Knowledge</option>
+        <option value="11">Film</option>
+        <option value="18">Computer</option>
+        <option value="23">History</option>
+        <option value="28">Vehicles</option>
+        <option value="19">Mathematic</option>
+    </select>
+    <select id="triviaDifficulty" onchange="selectHandler(this)" name="difficulty">
+        <option value="" selected hidden>Choose Difficulty Level</option>
+        <option value="easy">Easy</option>
+        <option value="medium">Medium</option>
+        <option value="hard">Hard</option>
+    </select>
+    <select id="triviaType" onchange="selectHandler(this)" name="type">
+        <option value="" selected hidden>Choose Question Type</option>
+        <option value="multiple">Multiple Choice</option>
+        <option value="boolean">True / False</option>
+    </select>
+    <button onclick="getData()">Confirm</button>
+    <button onclick="gameStarter()">Start</button>
+    <div id="gameCard">
+        <div id="timer"></div>
+        <div id="questionHolder"></div>
+        <ul id="answersChoice"></ul>
+    </div>
+
+    <div id="yesOrNo"></div>
+    <div id="roundReport"></div>
+
+</body>
+
+</html>
