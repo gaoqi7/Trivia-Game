@@ -7,10 +7,11 @@ var wrongAnswer = questionsTotal - correctAnswerTotal;
 var strUrl = "https://opentdb.com/api.php?amount=" + questionsTotal
 //Counter for Ending API url building process
 var counter = 0;
-var intervalId = 0;
+var cardIntervalId = 0;
 var timerIntervalId = 0;
 var cardCounter = 0;
 var intervalTime = 10;
+var playerChoice = [];
 
 
 
@@ -35,26 +36,48 @@ function getData()
             console.log(questionPool)
         });
     };
+    $("#keepCalm").fadeOut(800);
 };
 
 //Display Game Card
-function buildNewGameCard()
+function buildNewGameCard(n)
 {
-    let queObj = questionPool.results[cardCounter];
+    let queObj = questionPool.results[n];
     //Build Card Header
-    $("#cardHeader").text(`Question NO.${cardCounter + 1}`);
+    $("#cardHeader").text(`Question NO.${n + 1}`);
     //Build Question Line
-    $("#questionHolder").html(queObj.question);
+    $("#questionHolder").text(queObj.question);
 
     //Build Answer Lines
     //Random an index for new added correct item
-    let i = Math.floor(Math.random() * queObj.incorrect_answers.length + 1)
-    queObj.incorrect_answers.splice(i, 0, queObj.correct_answer);
-    console.log(queObj.incorrect_answers);
+    let i = Math.floor(Math.random() * (queObj.incorrect_answers.length + 1));
+    console.log("random index " + i);
+
+    //---------------
+
+    const insert = (arr, index, newItem) => [
+        // part of the array before the specified index
+        ...arr.slice(0, index),
+        // inserted item
+        newItem,
+        // part of the array after the specified index
+        ...arr.slice(index)
+    ]
+    const incPc = insert(queObj.incorrect_answers, i, queObj.correct_answer);
+    console.log(incPc)
+
+
+    //-----------
+
+
+
+
+    // queObj.incorrect_answers.splice(i, 0, queObj.correct_answer);
+    console.log("the correct answer is " + queObj.correct_answer);
     //building process
-    for (let j = 0; j < queObj.incorrect_answers.length; j++)
+    for (let j = 0; j < incPc.length; j++)
     {
-        $("ul").append(`<li class = "answerOption">${queObj.incorrect_answers[j]}</li>`);
+        $("ul").append(`<li class = "answerOption">${incPc[j]}</li>`);
     };
     $(`ul li:nth-child(${i + 1})`).addClass("correctAnswer");
 };
@@ -65,10 +88,17 @@ function oldCardRemover()
     $("#answersChoice").empty();
 };
 
-function gameReport()
+function gameReport(btn)
 {
+    oldCardRemover();
+    console.log($(btn).text() - 1);
+
+    buildNewGameCard($(btn).text() - 1);
+    $(".correctAnswer").addClass("bg-success");
 
 };
+
+
 
 function displayTimer()
 {
@@ -78,7 +108,7 @@ function displayTimer()
     var timeLeft = intervalTime;
     function setCountDown()
     {
-        $("#timer").text(`Time left: ${timeLeft}s`);
+        $("#timer").text(`${timeLeft}s`);
         timeLeft--;
     };
     setCountDown();
@@ -91,41 +121,56 @@ function cardSwitch()
     displayTimer();
     if (cardCounter < questionsTotal)
     {
+        console.log("start of function cardCounter is " + cardCounter);
+
         oldCardRemover();
-        buildNewGameCard();
+        buildNewGameCard(cardCounter);
         cardCounter++;
         //Click event listener must be inside the interval
         $("ul li").on("click", function ()
         {
-            clearInterval(intervalId);
+            clearInterval(cardIntervalId);
             clearInterval(timerIntervalId)
             if ($(this).hasClass("correctAnswer"))
             {
-                console.log("you are right!");
+                console.log("click time cardCounter is " + cardCounter);
+
+                // console.log("you are right!");
                 correctAnswerTotal++;
+                $("#scoreWin").text(`${correctAnswerTotal}`);
+                $(`#btn${cardCounter - 1}`).removeClass("badge-warning").addClass("badge-success");
+
             } else
             {
-                console.log("you are wrong");
+                // console.log("you are wrong");
+                $(`#btn${cardCounter - 1}`).removeClass("badge-warning").addClass("badge-danger");
+                console.log("click time cardCounter is " + cardCounter);
             };
             //Break the current interval
-            // clearInterval(intervalId);
+            // clearInterval(cardIntervalId);
             //Create a new interval
-            gameStarter();
+            if (cardCounter !== questionsTotal)
+            {
+                gameStarter();
+            }
+
         });
 
     } else
     {
-        clearInterval(intervalId);
+        clearInterval(cardIntervalId);
         clearInterval(timerIntervalId);
 
         console.log("game over");
     };
+    console.log("end of function, cardCounter is " + cardCounter);
+
 
 };
 
 function runTrivia()
 {
-    intervalId = setInterval(cardSwitch, intervalTime * 1000);
+    cardIntervalId = setInterval(cardSwitch, (intervalTime - 1) * 1000);
 };
 
 function gameStarter()

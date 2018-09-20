@@ -15,3 +15,12 @@
 .answerOption {
     font-size: 1.8rem;
 }
+li:hover {
+    background-color: rgba(138, 123, 126, 0.879);
+}
+
+#keepCalm {
+    display: block;
+    margin-left: 14rem;
+    width: 20rem;
+}
