@@ -11,7 +11,6 @@ var cardIntervalId = 0;
 var timerIntervalId = 0;
 var cardCounter = 0;
 var intervalTime = 10;
-var playerChoice = [];
 
 
 
@@ -133,26 +132,22 @@ function cardSwitch()
             clearInterval(timerIntervalId)
             if ($(this).hasClass("correctAnswer"))
             {
-                console.log("click time cardCounter is " + cardCounter);
-
                 // console.log("you are right!");
                 correctAnswerTotal++;
                 $("#scoreWin").text(`${correctAnswerTotal}`);
-                $(`#btn${cardCounter - 1}`).removeClass("badge-warning").addClass("badge-success");
+                $(`#btn${cardCounter - 1}`).removeClass("badge-warning badge-danger").addClass("badge-success");
 
             } else
             {
                 // console.log("you are wrong");
-                $(`#btn${cardCounter - 1}`).removeClass("badge-warning").addClass("badge-danger");
-                console.log("click time cardCounter is " + cardCounter);
+                $(`#btn${cardCounter - 1}`).removeClass("badge-warning badge-success").addClass("badge-danger");
             };
             //Break the current interval
             // clearInterval(cardIntervalId);
             //Create a new interval
-            if (cardCounter !== questionsTotal)
-            {
-                gameStarter();
-            }
+
+            gameStarter();
+
 
         });
 
@@ -162,22 +157,46 @@ function cardSwitch()
         clearInterval(timerIntervalId);
 
         console.log("game over");
+        oldCardRemover();
+        // $("#questionHolder").text("Game End. Please Chick The Button Below For  Review.")
+        $("#cardHeader").text("Game End").removeClass("badge-info").addClass("badge-danger");
+        $("#resetBtn").show();
     };
-    console.log("end of function, cardCounter is " + cardCounter);
-
-
 };
 
 function runTrivia()
 {
-    cardIntervalId = setInterval(cardSwitch, (intervalTime - 1) * 1000);
+    cardIntervalId = setInterval(cardSwitch, (intervalTime + 1) * 1000);
 };
 
 function gameStarter()
 {
     cardSwitch();
-    runTrivia();
+    if (cardCounter < questionsTotal)
+    {
+        runTrivia();
+    };
 }
 
+function resetGame()
+{
+    clearInterval(cardIntervalId);
+    clearInterval(timerIntervalId);
+    correctAnswerTotal = 0;
+    wrongAnswer = questionsTotal - correctAnswerTotal;
+    counter = 3;
+    cardIntervalId = 0;
+    timerIntervalId = 0;
+    cardCounter = 0;
+    intervalTime = 10;
+    getData();
+    console.log(questionPool);
+    $("#scoreWin").text("0");
+    cardCounter = 0;
+    $(".statusBtn").removeClass("badge-danger").addClass("badge-warning");
+    $("#cardHeader").text("Question NO.").removeClass("badge-danger").addClass("badge-info");
+
+    gameStarter();
+}
 
 

@@ -24,3 +24,7 @@ li:hover {
     margin-left: 14rem;
     width: 20rem;
 }
+
+#resetBtn {
+    display: none;
+}
