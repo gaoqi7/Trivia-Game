@@ -64,7 +64,6 @@ function buildNewGameCard(n)
 
   //-----------
 
-  // queObj.incorrect_answers.splice(i, 0, queObj.correct_answer);
   console.log("the correct answer is " + queObj.correct_answer);
   //building process
   for (let j = 0; j < incPc.length; j++)
@@ -191,7 +190,6 @@ function resetGame()
   getData();
   console.log(questionPool);
   $("#scoreWin").text("0");
-  // $(".statusBtn").removeClass("badge-danger badge-success").addClass("badge-warning");
   $("#cardHeader").text("Question NO.").removeClass("badge-danger").addClass("badge-info");
 $("#reportContainer").empty();
 $("#resetBtn").hide();
